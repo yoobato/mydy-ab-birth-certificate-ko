@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ab-birthcert-ko.mydy.kr/sitemap.xml

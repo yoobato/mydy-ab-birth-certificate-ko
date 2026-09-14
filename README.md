@@ -1,57 +1,72 @@
 # Alberta Birth KO
 
-알버타 출생증명서를 보며 한글 항목을 입력하고, 자필 서명란이 있는 Letter 한글 번역문 PDF를 만드는 정적 웹 도구입니다. GitHub 저장소: [mydy-ab-birth-certificate-ko](https://github.com/yoobato/mydy-ab-birth-certificate-ko).
+캐나다 알버타 출생증명서를 보며 한글 내용을 입력하고 **Letter 크기의 번역문 PDF**를 만드는 웹 도구입니다.
 
-## 실행
+**[서비스 열기](https://ab-birthcert-ko.mydy.kr/)** · [GitHub](https://github.com/yoobato/mydy-ab-birth-certificate-ko) · [개발·운영 안내](docs/MAINTENANCE.md)
+
+![링크 공유 이미지](public/og-image.png)
+
+## 사용 방법
+
+1. 원본 출생증명서를 준비합니다.
+2. 아이의 성·이름·출생 도시, 부모의 성명·출생 국가를 한글로 입력합니다.
+3. 생년월일·등록일·발급일을 선택하고 성별과 등록번호를 입력합니다.
+4. 등록관 이름을 한국어 발음대로 직접 입력하고 번역자 이름을 기재합니다. 자동 번역이나 인명 제안은 제공하지 않습니다.
+5. 미리보기로 확인한 뒤 PDF를 저장하고 Letter 용지에 출력합니다. 번역자 이름 옆 `(인)` 위치에 자필 서명합니다.
+
+상단 부모 항목은 모 성명, 하단은 부 성명입니다. 서식 번호와 바코드 아래 일련번호는 원본을 확인해 입력합니다. 두 항목은 필수 입력값이 아닙니다. 날짜는 생년월일 ≤ 등록일 ≤ 발급일 순서를 검사합니다.
+
+정부·영사관 공식 서비스가 아닙니다. 제출 전 원본과 번역문을 대조하고, 제출 요건은 [주밴쿠버 대한민국 총영사관 안내](https://www.mofa.go.kr/ca-vancouver-ko/brd/m_4576/view.do?seq=611226)에서 확인하세요.
+
+## 개인정보와 통계
+
+양식 입력값은 현재 탭의 메모리에만 보관합니다. 새로고침하면 사라지며 서버 전송, 자동 저장, 외부 번역 API 호출을 하지 않습니다. PDF는 브라우저에서 생성하고, 다운로드한 파일은 사용자가 관리합니다.
+
+Google Analytics는 방문·미리보기·다운로드 이용 통계에 사용됩니다. 기본 접속 정보와 분석 쿠키를 사용할 수 있지만, 양식 입력값과 PDF 내용은 이벤트에 포함하지 않습니다. [수집 이벤트와 설정](docs/MAINTENANCE.md#google-analytics)을 참고하세요.
+
+## 로컬 개발
+
+Node.js 22.12 이상을 사용합니다. CI는 Node.js 22로 실행합니다.
 
 ```sh
 npm ci
-npm run dev
+npm run dev -- --port 5178
+```
+
+[로컬 페이지](http://127.0.0.1:5178/)에서 확인합니다. 개발 서버에서는 GA가 비활성화됩니다.
+
+```sh
 npm test
 npm run build
 ```
 
-Node.js 20.19 이상 또는 22 이상을 사용합니다. 빌드 결과는 `dist/`이며 GitHub Pages 하위 경로를 지원합니다.
+브라우저 확인은 개발 서버를 켠 상태에서 실행합니다. 최초 실행 시 Playwright 브라우저 설치가 필요할 수 있습니다.
 
-## GitHub Pages
+```sh
+npx playwright install chromium
+npm run test:browser
+```
 
-수정할 때마다 검증 후 `main` 브랜치에 커밋하고 `origin/main`에 푸시합니다. GitHub 저장소 **Settings → Pages → Source → GitHub Actions**를 선택하면 포함된 워크플로가 테스트·빌드 후 배포합니다.
+## 프로젝트 구성
 
-## 동작과 표기
+| 경로 | 역할 |
+| --- | --- |
+| `src/main.js`, `src/style.css` | 입력 화면과 이벤트, 반응형 스타일 |
+| `src/data.js` | 필드 정의와 입력 검증 |
+| `src/pdf.js` | Letter PDF 생성과 한글 글꼴 포함 |
+| `src/analytics.js` | 허용된 GA 이벤트 전송 |
+| `index.html` | 검색·공유 메타데이터, 구조화 데이터, 초기 안내 |
+| `public/` | 이미지·글꼴·robots.txt·sitemap.xml |
+| `scripts/generate-og-image.mjs` | 공유 이미지 재생성 |
+| `tests/` | 입력 검증·통계·브라우저 확인 |
 
-- 아이의 성·이름, 출생지, 부모 이름·출생지, 번역자: 한글 입력.
-- 날짜 세 항목: 날짜 선택기. 윤년 및 생년월일 ≤ 등록일 ≤ 발급일 검사.
-- 상단 부모 항목은 모 성명, 하단은 부 성명으로 표시합니다.
-- 등록번호, 바코드 아래 일련번호, 서식 번호 입력. 일련번호·서식 번호는 선택 항목입니다.
-- 등록관 이름은 한국어 발음대로 직접 한글 입력합니다. 입력한 이름이 PDF에 그대로 반영되며 자동 이름 제안은 제공하지 않습니다.
-- 외국 인명의 한글 표기는 '국어의 로마자 표기법'이 아니라 발음을 기준으로 하는 '외래어 표기법'을 참고합니다. https://www.korean.go.kr/kornorms/main/main.do
-- 등록관 서명, 관인, 보안 무늬, 바코드를 복제하지 않습니다. PDF는 명확히 한글 번역문으로 표시합니다.
-- PDF에 Nanum Gothic 글꼴을 포함하며, 텍스트 선택/검색이 가능합니다. 라이선스: `public/fonts/OFL.txt`.
+## 자료와 출처
 
-## 개인정보
+- 내비게이션 로고·등록관 원형 장식·공유 카드: 프로젝트용 그래픽. 원형 장식은 공식 관인 복제가 아닙니다.
+- Alberta Canada 로고: [알버타 정부 Visual Identity Manual (2018), §2.2.3.1](https://open.alberta.ca/dataset/ed5f57ac-9484-4f8c-94ed-99a808fa2248/resource/d81424b8-d293-4032-acb8-6334429159b8/download/visual-identity-manual.pdf)의 공개 로고 영역을 렌더링했습니다.
+- Nanum Gothic: [글꼴 라이선스](public/fonts/OFL.txt). PDF에 글꼴을 포함해 한글 텍스트 선택·검색을 지원합니다.
+- 외국 인명의 한글 표기는 [국립국어원 어문 규범](https://www.korean.go.kr/kornorms/main/main.do)의 외래어 표기법을 참고할 수 있습니다.
 
-사용자 원본·번역 PDF와 실제 가족 정보는 프로젝트에 포함하지 않습니다. 입력값은 현재 탭의 메모리에만 유지하며 양식용 localStorage나 외부 번역 API를 사용하지 않습니다. GA4 사용 통계는 아래 설명에 따라 별도로 수집합니다. PDF는 브라우저에서 생성하며 글꼴과 라이브러리는 사이트와 함께 제공합니다. 새로고침하면 입력 정보가 사라집니다. 입력 정보는 서버에 전송하지 않습니다. 브라우저에서 저장한 PDF는 사용자가 관리합니다.
+실제 출생증명서·가족 정보·사용자 PDF는 저장소에 포함하지 않습니다. PDF에는 원본의 서명·관인·보안 무늬·바코드 이미지를 복제하지 않습니다.
 
-## 확인
-
-단위 테스트와 데스크톱/모바일 브라우저 확인, 가상 데이터 PDF 생성 및 시각 검사를 수행합니다. 정부나 영사관 공식 서비스가 아니며 제출 전 원본과 번역문을 대조해야 합니다.
-
-## 로고와 안내 출처
-
-- 내비게이션 로고: 이 프로젝트용으로 제작한 SVG.
-- Alberta Canada: 알버타 정부가 공개한 Visual Identity Manual (2018), §2.2.3.1의 세로형 로고. 공식 공개 자료의 로고 영역을 그대로 렌더링했습니다. 출처: https://open.alberta.ca/dataset/ed5f57ac-9484-4f8c-94ed-99a808fa2248/resource/d81424b8-d293-4032-acb8-6334429159b8/download/visual-identity-manual.pdf
-- 등록관 원형 장식은 요청한 문구를 배치한 자체 SVG이며 공식 관인을 복제한 것이 아닙니다.
-- 제출 안내: https://www.mofa.go.kr/ca-vancouver-ko/brd/m_4576/view.do?seq=611226 (2026-09-14 확인).
-- PDF: Letter 612 × 792 pt. 모/부 성명, 자간을 넓힌 일련번호, 번역자 표와 연한 (인) 표시.
-
-## 배포 버전 표시
-
-내비게이션 GitHub 버튼 아래에 빌드한 Git 커밋의 짧은 SHA를 표시합니다. 버튼은 저장소로 이동하며, 우측의 비공식 서비스 안내 아래에는 연도 없이 © Daeyeol Ryu 저작권을 표시합니다. GitHub Actions의 `GITHUB_SHA`를 우선 사용하고 로컬 빌드에서는 `git rev-parse HEAD`로 확인합니다. 개발 서버에는 로컬 개발 화면임을 별도 표시합니다.
-
-## Google Analytics
-
-- 측정 ID: `G-2TXN5Z7X2G`. 프로덕션 빌드에서만 로드하며 개발 서버에서는 비활성화됩니다.
-- `page_view`: 페이지 방문. `translation_preview`: PDF 생성 후 미리보기를 연 경우. `pdf_download`: 생성된 PDF 다운로드를 시작한 경우 (브라우저의 실제 파일 저장 완료 여부는 확인할 수 없음). 미리보기 내부 저장 링크도 집계합니다.
-- 이벤트 함수는 허용된 이벤트 이름만 받습니다. 양식값, PDF 내용, 파일명, URL 쿼리/해시, 원본 리퍼러를 보내지 않습니다. 페이지 메타데이터는 고정값이며 광고 개인화 및 Google signals는 비활성화합니다. GA의 기본 접속정보/분석 쿠키는 사용됩니다.
-- GA 관리 → 데이터 스트림에서 **향상된 측정은 꺼두세요**. 자동 폼·클릭·검색 이벤트 대신 명시한 이벤트만 사용합니다.
-- 브라우저 회귀 테스트는 Google 태그 로드를 가짜 응답으로 대체하여 실제 통계로 테스트 이벤트를 전송하지 않습니다.
+© [Daeyeol Ryu](https://yoobato.com). All rights reserved. 외부 자료에는 각 자료의 이용 조건이 적용됩니다.
