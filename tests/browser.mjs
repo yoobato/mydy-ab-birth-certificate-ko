@@ -9,13 +9,13 @@ await page.addInitScript(()=>{document.modelContext={registerTool(t){window.regi
 await page.goto(base);await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:'tmp/desktop.png',fullPage:true});
 assert.equal(await page.evaluate(()=>window.registeredTool.execute({}).completed),0);
 assert.equal(await page.evaluate(()=>{try{window.registeredTool.execute({bad:1});return false}catch{return true}}),true);
-const values={registrar:'Trevor Bergen',surname:'김',given:'하늘',birth:'2024-02-29',place:'에드먼턴',registration:'TEST-2024-000001',registered:'2024-03-01',issued:'2024-03-05',parent1:'이예시',parent1Place:'대한민국',parent2:'김예시',parent2Place:'대한민국',translator:'김번역',serial:'AB00000000'};
+const values={registrarKo:'트레버 버겐',surname:'김',given:'하늘',birth:'2024-02-29',place:'에드먼턴',registration:'TEST-2024-000001',registered:'2024-03-01',issued:'2024-03-05',parent1:'이예시',parent1Place:'대한민국',parent2:'김예시',parent2Place:'대한민국',translator:'김번역',serial:'AB00000000'};
 for(const [key,value]of Object.entries(values))await page.locator('#'+key).fill(value);
-await page.locator('#registrar').fill('Chris');assert.equal(await page.locator('#registrarKo').inputValue(),'크리스');await page.locator('#registrar').fill('Daeyeol');assert.equal(await page.locator('#registrarKo').inputValue(),'대열');await page.locator('#registrar').fill('Trevor Bergen');await page.locator('#sex').selectOption('F');await page.locator('#confirmed').check();assert.equal(await page.locator('#registrarKo').inputValue(),'트레버 버겐');assert.equal(await page.evaluate(()=>window.registeredTool.execute({}).completed),15);
+await page.locator('#sex').selectOption('F');assert.equal(await page.locator('#registrar').count(),0);assert.equal(await page.locator('#confirmed').count(),0);assert.equal(await page.locator('#registrarKo').inputValue(),'트레버 버겐');assert.equal(await page.evaluate(()=>window.registeredTool.execute({}).completed),14);
 await page.locator('#preview').click();await page.waitForFunction(()=>document.querySelector('#dialog').open);await page.locator('#close').click();
 const wait=page.waitForEvent('download');await page.locator('#download').click();const download=await wait;await download.saveAs('tmp/example.pdf');
 await page.locator('#registered').fill('2024-02-28');await page.locator('#download').click();assert.match(await page.locator('#status').innerText(),/순서/);
-await page.locator('#registrar').fill('Unlistedname');assert.equal(await page.locator('#registrarKo').inputValue(),'');assert.equal(await page.locator('#confirmed').isChecked(),false);
+await page.locator('#registered').fill('2024-03-01');await page.locator('#registrarKo').fill('Trevor Bergen');await page.locator('#download').click();assert.match(await page.locator('#status').innerText(),/한글/);
 await page.reload();assert.equal(await page.locator('#surname').inputValue(),'');
 await page.setViewportSize({width:390,height:844});await page.screenshot({path:'tmp/mobile.png',fullPage:true});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
 assert.deepEqual(errors,[]);assert.ok(requests.every(url=>url.startsWith(base)||url.startsWith('blob:')));console.log('PASS: desktop, mobile, privacy, preview, PDF download, validation, reset, WebMCP');await browser.close();
