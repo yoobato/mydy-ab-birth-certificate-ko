@@ -5,6 +5,7 @@ await mkdir('tmp',{recursive:true});
 const base=process.env.TEST_URL || 'http://127.0.0.1:5178/';
 const browser=await chromium.launch({headless:true});
 const page=await browser.newPage({viewport:{width:1440,height:1200}});const errors=[];page.on('pageerror',e=>errors.push(e.message));const requests=[];page.on('request',r=>requests.push(r.url()));
+await page.route('https://www.googletagmanager.com/**',route=>route.fulfill({contentType:'application/javascript',body:'/* Analytics intercepted for QA; nothing sent to Google. */'}));
 await page.addInitScript(()=>{document.modelContext={registerTool(t){window.registeredTool=t;}};});
 await page.goto(base);await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:'tmp/desktop.png',fullPage:true});
 assert.equal(await page.evaluate(()=>window.registeredTool.execute({}).completed),0);
@@ -14,8 +15,9 @@ for(const [key,value]of Object.entries(values))await page.locator('#'+key).fill(
 await page.locator('#sex').selectOption('F');assert.equal(await page.locator('#registrar').count(),0);assert.equal(await page.locator('#confirmed').count(),0);assert.equal(await page.locator('#registrarKo').inputValue(),'트레버 버겐');assert.equal(await page.evaluate(()=>window.registeredTool.execute({}).completed),14);
 await page.locator('#preview').click();await page.waitForFunction(()=>document.querySelector('#dialog').open);await page.locator('#close').click();
 const wait=page.waitForEvent('download');await page.locator('#download').click();const download=await wait;await download.saveAs('tmp/example.pdf');
+const events=await page.evaluate(()=>Array.from(window.dataLayer||[]).filter(a=>a[0]==='event').map(a=>a[1]));if(events.length)assert.deepEqual(events,['page_view','translation_preview','pdf_download']);const queued=await page.evaluate(()=>JSON.stringify(Array.from(window.dataLayer||[])));for(const value of Object.values(values))assert.ok(!queued.includes(value));
 await page.locator('#registered').fill('2024-02-28');await page.locator('#download').click();assert.match(await page.locator('#status').innerText(),/순서/);
 await page.locator('#registered').fill('2024-03-01');await page.locator('#registrarKo').fill('Trevor Bergen');await page.locator('#download').click();assert.match(await page.locator('#status').innerText(),/한글/);
 await page.reload();assert.equal(await page.locator('#surname').inputValue(),'');
 await page.setViewportSize({width:390,height:844});await page.screenshot({path:'tmp/mobile.png',fullPage:true});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
-assert.deepEqual(errors,[]);assert.ok(requests.every(url=>url.startsWith(base)||url.startsWith('blob:')));console.log('PASS: desktop, mobile, privacy, preview, PDF download, validation, reset, WebMCP');await browser.close();
+assert.deepEqual(errors,[]);assert.ok(requests.every(url=>url.startsWith(base)||url.startsWith('blob:')||url.startsWith('https://www.googletagmanager.com/gtag/js?id=G-2TXN5Z7X2G')));console.log('PASS: desktop, mobile, privacy, preview, PDF download, validation, reset, WebMCP');await browser.close();
