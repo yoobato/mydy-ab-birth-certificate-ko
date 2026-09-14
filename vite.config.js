@@ -15,7 +15,6 @@ export default defineConfig(({ command }) => {
   return {
     define: {
       __BUILD_COMMIT__: JSON.stringify(commit),
-      __BUILD_YEAR__: JSON.stringify(new Date().getFullYear()),
       __IS_LOCAL_DEV__: JSON.stringify(command === 'serve'),
     },
   };
