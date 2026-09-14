@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {koreanDate,suggestName,validate} from '../src/data.js';
+const sample={surname:'김',given:'하늘',birth:'2024-02-29',sex:'F',place:'에드먼턴',registration:'TEST-0000',registered:'2024-03-01',issued:'2024-03-05',parent1:'이예시',parent1Place:'대한민국',parent2:'김예시',parent2Place:'대한민국',registrar:'Trevor Bergen',registrarKo:'트레버 버겐',translator:'김번역',confirmed:true};
+test('dates remain local calendar dates, including leap day',()=>{assert.equal(koreanDate('2024-02-29'),'2024년 2월 29일');assert.throws(()=>koreanDate('2023-02-29'));assert.throws(()=>koreanDate('2024-13-01'));});
+test('unknown names require manual pronunciation instead of fabricated output',()=>{assert.deepEqual(suggestName(' Trevor Bergen '),{value:'트레버 버겐',missing:[]});assert.equal(suggestName('John L. Smith').value,'존 엘 스미스');assert.deepEqual(suggestName('Unknownname Smith').missing,['Unknownname']);assert.equal(suggestName('Unknownname Smith').value,'');});
+test('reject incomplete, unconfirmed, English, and reversed dates',()=>{assert.equal(validate(sample),sample);for(const override of [{confirmed:false},{birth:'2024-03-03'},{issued:'2024-02-01'},{surname:'Kim'},{sex:'X'},{translator:''}])assert.throws(()=>validate({...sample,...override}));});
