@@ -1,7 +1,7 @@
 export const fields = [
  ['surname','성','Surname','text','예. 김'],['given','이름','Given Names','text','예. 하늘'],
  ['birth','생년월일','Date of Birth','date',''],['sex','성별','Sex','select',''],
- ['place','출생지','Place of Birth','text','예. 캘거리, 에드먼턴'],['registration','등록번호','Registration No.','text','원본의 등록번호'],
+ ['place','출생지','Place of Birth','text','예. 캘거리, 에드먼턴'],['registration','등록번호','Registration No.','text','등록번호'],
  ['registered','등록일','Registration Date','date',''],['issued','발급일','Date Issued','date',''],
  ['parent1','모 성명','Name of Parent · 원본 순서','text','한글 성명'],['parent1Place','모 출생지','Place of Birth','text','예. 대한민국'],
  ['parent2','부 성명','Name of Parent · 원본 순서','text','한글 성명'],['parent2Place','부 출생지','Place of Birth','text','예. 대한민국']
@@ -19,4 +19,4 @@ export function koreanName(input){
  const words=input.toLowerCase().trim().split(/\s+/);let failed=false;const result=words.map(word=>word.split('-').map(part=>{const v=convert(part);if(!v)failed=true;return v;}).join('')).join(' ');return failed?'':result;
 }
 export function suggestName(input,mode='english'){const parts=input.trim().split(/[\s-]+/).filter(Boolean);if(mode==='korean'){const value=koreanName(input);return{value,missing:value?[]:[input]};}const missing=[];const converted=parts.map(part=>{const key=part.toLowerCase().replace(/\.$/,'');if(names[key])return names[key];if(['daeyeol'].includes(key))return koreanNames[key];if(key.length===1&&initials[key])return initials[key];missing.push(part);return '';});return {value:missing.length?'':converted.join(' '),missing};}
-export const help={surname:'출생신고할 아기의 성을 한글로 적어 주세요.',given:'성을 제외한 아기의 이름을 한글로 적어 주세요.',birth:'아기가 태어난 날짜를 선택해 주세요.',sex:'원본의 M은 남, F는 여를 선택해 주세요.',place:'아기가 태어난 도시를 한글로 적어 주세요.',registration:'원본의 등록번호를 하이픈까지 그대로 옮겨 주세요.',registered:'출생기록이 등록된 날짜를 선택해 주세요.',issued:'이 증명서가 발급된 날짜를 선택해 주세요.',parent1:'어머니의 성과 이름을 한글로 적어 주세요.',parent1Place:'어머니가 태어난 국가·지역을 한글로 적어 주세요.',parent2:'아버지의 성과 이름을 한글로 적어 주세요.',parent2Place:'아버지가 태어난 국가·지역을 한글로 적어 주세요.'};
+export const help={surname:'출생신고할 아기의 성을 한글로 적어 주세요.',given:'성을 제외한 아기의 이름을 한글로 적어 주세요.',birth:'아기가 태어난 날짜를 선택해 주세요.',sex:'아기의 성별을 선택해 주세요.',place:'아기가 태어난 도시를 한글로 적어 주세요.',parent1:'어머니의 성과 이름을 한글로 적어 주세요.',parent1Place:'어머니가 태어난 국가·지역을 한글로 적어 주세요.',parent2:'아버지의 성과 이름을 한글로 적어 주세요.',parent2Place:'아버지가 태어난 국가·지역을 한글로 적어 주세요.'};
