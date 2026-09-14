@@ -10,7 +10,7 @@ export async function createPdf(data,fontBytes){
  const rule=(x1,y1,x2,y2)=>page.drawLine({start:{x:x1,y:y1},end:{x:x2,y:y2},thickness:.5,color:line});
  page.drawRectangle({x:180,y:720,width:394,height:40,borderColor:ink,borderWidth:1});
  text('출 생',344,732,22);
- text('알버타',140,676,29);text('캐나다',190,651,15);
+ text('알버타',260-font.widthOfTextAtSize('알버타',29),676,29);text('캐나다',260-font.widthOfTextAtSize('캐나다',15),651,15);
  text('출생증명서',38,604,20);
  text(data.formCode,38,554,9,150);
  const centered=(value,left,width,y,size)=>{const fit=Math.min(size,width/font.widthOfTextAtSize(value,1));text(value,left+(width-font.widthOfTextAtSize(value,fit))/2,y,fit,width);};
