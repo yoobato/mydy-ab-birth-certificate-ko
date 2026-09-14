@@ -46,4 +46,4 @@ Node.js 20.19 이상 또는 22 이상을 사용합니다. 빌드 결과는 `dist
 
 ## 배포 버전 표시
 
-내비게이션 GitHub 버튼 아래에 빌드한 Git 커밋의 짧은 SHA를 표시합니다. 버튼은 저장소로 이동하며, 하단 왼쪽에는 연도 없이 © Daeyeol Ryu 저작권을 표시합니다. GitHub Actions의 `GITHUB_SHA`를 우선 사용하고 로컬 빌드에서는 `git rev-parse HEAD`로 확인합니다. 개발 서버에는 로컬 개발 화면임을 별도 표시합니다.
+내비게이션 GitHub 버튼 아래에 빌드한 Git 커밋의 짧은 SHA를 표시합니다. 버튼은 저장소로 이동하며, 우측의 비공식 서비스 안내 아래에는 연도 없이 © Daeyeol Ryu 저작권을 표시합니다. GitHub Actions의 `GITHUB_SHA`를 우선 사용하고 로컬 빌드에서는 `git rev-parse HEAD`로 확인합니다. 개발 서버에는 로컬 개발 화면임을 별도 표시합니다.
