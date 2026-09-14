@@ -39,7 +39,7 @@ Node.js 20.19 이상 또는 22 이상을 사용합니다. 빌드 결과는 `dist
 ## 로고와 안내 출처
 
 - 내비게이션 로고: 이 프로젝트용으로 제작한 SVG.
-- Alberta Canada: 사용자가 제공한 원본 증명서에서 공식 로고 영역만 분리한 이미지. 개인 정보·서명·번호는 포함하지 않습니다.
+- Alberta Canada: 알버타 정부가 공개한 Visual Identity Manual (2018), §2.2.3.1의 세로형 로고. 공식 공개 자료의 로고 영역을 그대로 렌더링했습니다. 출처: https://open.alberta.ca/dataset/ed5f57ac-9484-4f8c-94ed-99a808fa2248/resource/d81424b8-d293-4032-acb8-6334429159b8/download/visual-identity-manual.pdf
 - 등록관 원형 장식은 요청한 문구를 배치한 자체 SVG이며 공식 관인을 복제한 것이 아닙니다.
 - 제출 안내: https://www.mofa.go.kr/ca-vancouver-ko/brd/m_4576/view.do?seq=611226 (2026-09-14 확인).
 - PDF: Letter 612 × 792 pt. 모/부 성명, 자간을 넓힌 일련번호, 번역자 표와 연한 (인) 표시.
