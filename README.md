@@ -1,10 +1,21 @@
-# Alberta Birth KO
+# Translate Alberta Birth Certificate to Korean
 
 캐나다 알버타 출생증명서를 보며 한글 내용을 입력하고 **Letter 크기의 번역문 PDF**를 만드는 웹 도구입니다.
+
+> **알버타 주 출생증명서의 한글 번역문 생성**
 
 **[서비스 열기](https://ab-birthcert-ko.mydy.kr/)** · [GitHub](https://github.com/yoobato/mydy-ab-birth-certificate-ko) · [개발·운영 안내](docs/MAINTENANCE.md)
 
 ![링크 공유 이미지](public/og-image.png)
+
+## 주요 기능
+
+- 알버타 출생증명서 배치를 참고한 PC·모바일 입력 화면
+- 한글 이름·출생지 입력, 날짜 선택과 유효성 검사
+- 한글 글꼴을 포함한 PDF 미리보기·다운로드와 번역자 서명란
+- 브라우저 내부에서 양식 처리·PDF 생성
+
+이 서비스는 사용자가 입력한 한글을 번역문 서식에 배치합니다. 원본 문서를 자동 번역하거나 OCR로 읽는 서비스는 아닙니다.
 
 ## 사용 방법
 
@@ -60,6 +71,16 @@ npm run test:browser
 | `scripts/generate-og-image.mjs` | 공유 이미지 재생성 |
 | `tests/` | 입력 검증·통계·브라우저 확인 |
 
+## 문서
+
+| 문서 | 내용 |
+| --- | --- |
+| [개발 현황](docs/DEVELOPMENT.md) | 화면·입력·PDF·데이터 흐름·검증 범위 |
+| [운영 안내](docs/MAINTENANCE.md) | 실행·배포·도메인·GA·SEO·공유 이미지 |
+| [변경 제안](docs/CONTRIBUTING.md) | 개인정보 없는 오류 보고와 변경 원칙 |
+| [라이선스](LICENSE.md) | 프로젝트 저작권과 외부 자료의 구분 |
+| [제3자 고지](THIRD_PARTY_NOTICES.md) | 오픈소스 버전·저작권·라이선스 원문 |
+
 ## 자료와 출처
 
 - 내비게이션 로고·등록관 원형 장식·공유 카드: 프로젝트용 그래픽. 원형 장식은 공식 관인 복제가 아닙니다.
@@ -68,5 +89,9 @@ npm run test:browser
 - 외국 인명의 한글 표기는 [국립국어원 어문 규범](https://www.korean.go.kr/kornorms/main/main.do)의 외래어 표기법을 참고할 수 있습니다.
 
 실제 출생증명서·가족 정보·사용자 PDF는 저장소에 포함하지 않습니다. PDF에는 원본의 서명·관인·보안 무늬·바코드 이미지를 복제하지 않습니다.
+
+## 라이선스
+
+프로젝트 자체에는 아직 별도의 오픈소스 라이선스를 부여하지 않았습니다. 공개 저장소의 기존 저작권 표기를 유지합니다. 사용한 오픈소스 라이브러리와 글꼴은 각각의 라이선스를 따르며 [LICENSE.md](LICENSE.md)와 [제3자 고지문](THIRD_PARTY_NOTICES.md)에 정리했습니다.
 
 © [Daeyeol Ryu](https://yoobato.com). All rights reserved. 외부 자료에는 각 자료의 이용 조건이 적용됩니다.

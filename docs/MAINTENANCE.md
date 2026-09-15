@@ -61,3 +61,9 @@ Google Search Console에 사이트 소유권을 인증하고 사이트맵을 제
 - [Google JavaScript SEO](https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics)
 - [Open Graph 규격](https://ogp.me/)
 - [GitHub Pages 도메인 문제 해결](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/troubleshooting-custom-domains-and-github-pages)
+
+## 라이선스 고지 갱신
+
+의존성 변경 후 `npm ci`로 설치하고 `node scripts/generate-notices.mjs`를 실행합니다. `THIRD_PARTY_NOTICES.md`와 배포용 `public/THIRD_PARTY_NOTICES.txt`를 함께 커밋합니다. 현재 플랫폼에 설치된 패키지의 원문을 수집하므로 선택적 네이티브 패키지는 플랫폼에 따라 달라질 수 있습니다. npm 패키지에 내장된 코드의 추가 고지는 별도로 검토합니다. fontkit은 독립 LICENSE 파일이 없어 배포 번들의 라이선스 주석과 MIT 선언을 기록합니다.
+
+프로젝트 자체에 오픈소스 라이선스를 부여하는 결정은 저작권자가 별도로 내립니다. 정부 로고·외부 서비스·글꼴의 조건을 프로젝트 라이선스로 대체하지 않습니다.
