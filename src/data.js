@@ -3,8 +3,8 @@ export const fields = [
  ['birth','생년월일','Date of Birth','date',''],['sex','성별','Sex','select',''],
  ['place','출생지','Place of Birth','text','예. 캘거리, 에드먼턴'],['registration','등록번호','Registration No.','text','등록번호'],
  ['registered','등록일','Registration Date','date',''],['issued','발급일','Date Issued','date',''],
- ['parent1','모 성명','Name of Parent · 원본 순서','text','한글 성명'],['parent1Place','모 출생지','Place of Birth','text','예. 대한민국'],
- ['parent2','부 성명','Name of Parent · 원본 순서','text','한글 성명'],['parent2Place','부 출생지','Place of Birth','text','예. 대한민국']
+ ['parent1','모 성명','Name of Parent','text','한글 성명'],['parent1Place','모 출생지','Place of Birth','text','예. 대한민국'],
+ ['parent2','부 성명','Name of Parent','text','한글 성명'],['parent2Place','부 출생지','Place of Birth','text','예. 대한민국']
 ];
 export function koreanDate(value){if(!/^\d{4}-\d{2}-\d{2}$/.test(value))throw new Error('날짜를 선택해 주세요.');const [y,m,d]=value.split('-').map(Number);const date=new Date(0);date.setUTCFullYear(y,m-1,d);if(y<1000||date.getUTCFullYear()!==y||date.getUTCMonth()!==m-1||date.getUTCDate()!==d)throw new Error('유효한 날짜를 선택해 주세요.');return `${y}년 ${m}월 ${d}일`;}
 export function validate(data){for(const [key,label]of fields){if(!data[key]?.trim())throw new Error(`${label} 항목을 입력해 주세요.`);}for(const key of ['registrarKo','translator'])if(!data[key]?.trim())throw new Error('등록관과 번역자 이름을 입력해 주세요.');for(const key of ['birth','registered','issued'])koreanDate(data[key]);if(!['M','F'].includes(data.sex))throw new Error('성별을 선택해 주세요.');if(data.birth>data.registered||data.registered>data.issued)throw new Error('생년월일, 등록일, 발급일의 순서를 확인해 주세요.');for(const [key]of fields.filter(f=>f[3]==='text'&&!['registration'].includes(f[0]))){if(!/[가-힣]/u.test(data[key])||/[A-Za-z]/.test(data[key]))throw new Error('성명과 출생지는 한글로 입력해 주세요.');}for(const key of ['registrarKo','translator'])if(!/[가-힣]/u.test(data[key])||/[A-Za-z]/.test(data[key]))throw new Error('등록관 한글 표기와 번역자 이름을 확인해 주세요.');for(const value of Object.values(data))if(typeof value==='string'&&value.length>100)throw new Error('입력 내용은 항목당 100자 이내로 작성해 주세요.');return data;}
