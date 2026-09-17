@@ -6,6 +6,7 @@ const base=process.env.TEST_URL || 'http://127.0.0.1:5178/';
 const browser=await chromium.launch({headless:true});
 const page=await browser.newPage({viewport:{width:1440,height:1200}});const errors=[];page.on('pageerror',e=>errors.push(e.message));const requests=[];page.on('request',r=>requests.push(r.url()));
 await page.route('https://www.googletagmanager.com/**',route=>route.fulfill({contentType:'application/javascript',body:'/* Analytics intercepted for QA; nothing sent to Google. */'}));
+await page.route('https://pagead2.googlesyndication.com/**',route=>route.fulfill({contentType:'application/javascript',body:'/* AdSense intercepted for QA; no live ad requests. */'}));
 await page.goto(base);await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:'tmp/desktop.png',fullPage:true});
 const values={registrarKo:'트레버 버겐',surname:'김',given:'하늘',birth:'2024-02-29',place:'에드먼턴',registration:'TEST-2024-000001',registered:'2024-03-01',issued:'2024-03-05',parent1:'이예시',parent1Place:'대한민국',parent2:'김예시',parent2Place:'대한민국',translator:'김번역',serial:'AB00000000'};
 for(const [key,value]of Object.entries(values))await page.locator('#'+key).fill(value);
@@ -17,4 +18,4 @@ await page.locator('#registered').fill('2024-02-28');await page.locator('#downlo
 await page.locator('#registered').fill('2024-03-01');await page.locator('#registrarKo').fill('Trevor Bergen');await page.locator('#download').click();assert.match(await page.locator('#status').innerText(),/한글/);
 await page.reload();assert.equal(await page.locator('#surname').inputValue(),'');
 await page.setViewportSize({width:390,height:844});await page.screenshot({path:'tmp/mobile.png',fullPage:true});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
-assert.deepEqual(errors,[]);assert.ok(requests.every(url=>url.startsWith(base)||url.startsWith('blob:')||url.startsWith('https://www.googletagmanager.com/gtag/js?id=G-2TXN5Z7X2G')));console.log('PASS: desktop, mobile, privacy, preview, PDF download, validation, reset');await browser.close();
+assert.deepEqual(errors,[]);assert.ok(requests.every(url=>url.startsWith(base)||url.startsWith('blob:')||url.startsWith('https://www.googletagmanager.com/gtag/js?id=G-2TXN5Z7X2G')||url==='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4015788090404207'));console.log('PASS: desktop, mobile, privacy, preview, PDF download, validation, reset');await browser.close();
